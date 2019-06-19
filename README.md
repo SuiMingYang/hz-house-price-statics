@@ -24,19 +24,25 @@
 小区：get请求
     https://fangjia.fang.com/fangjia/map/getmapdata/hz?district=%E6%8B%B1%E5%A2%85&commerce=&x1=undefined&y1=undefined&x2=undefined&y2=undefined&v=20150116&newcode=
 
-历年：get小区
+历年：get请求
     https://fangjia.fang.com/fangjia/common/ajaxdetailtrenddata/hz?dataType=proj&projcode=2010780380&year=2
 
-新建scrapy爬虫项目，修改pipelines.py，定义items.py
+requests请求数据接口，selenium获取页面静态数据。
 
-##### 2.数据清洗
+树形结构嵌套请求，可以用for循环，可以用队列。
+
+执行crawl_data.py脚本
+
+##### 2.数据预处理
 清洗脏数据，整理数据维度。
-###### （1）
+###### （1）缺省值处理
+缺少的值不容易估算，删除。
 
-###### （2）
+###### （2）数据归一化
 
+###### （3）
 
-
+执行data_analysis.py脚本
 
 ##### 3.数据分析
 ###### （1）建立指标体系
@@ -48,9 +54,12 @@
 ###### （3）数据可视化
 
 ##### 4.数据预测
-###### （1）机器学习
+###### （1）模型选择
 微观层面上可以预测，但是实际上会受政策，经济等因素的影响，所以预测仅仅是在微观层面上，即仅考虑指标和数值的维度上，提供参考
-###### （2）
+###### （2）参数调优
+
+###### （3）输出分类结果
+
 
 
 -----
@@ -65,8 +74,10 @@
 
 ----
 
-Author: suimingyang
+Author: suimingyang 
+
 Email : suimingyang123@gmail.com
+
 Blog  : [https://suimingyang.github.io/](https://suimingyang.github.io/)
 
 ----
