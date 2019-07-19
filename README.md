@@ -43,6 +43,12 @@ requests请求数据接口，selenium获取页面静态数据。
 缺少的值不容易估算，删除。
 
 ###### （2）数据归一化
+`活跃度评级`、`板块评级`、`物业评级`、`教育评级`取值区间[**A,B,C,D**]
+`搜索指数`取值区间 **0-50**
+假设这些指标在一个量化维度，令**A=10，B=7.5，C=5，D=2.5，default=0，搜索指数/5**，归一化到**0-10**，五个值之和可以看做一个简单维度的评分。
+
+<font color="#dd0000">待开发：后面四个大文本字段信息量太大，需要正则抽取指标，后期再细化建模。</font><br /> 
+
 
 ###### （3）
 
@@ -93,7 +99,7 @@ requests请求数据接口，selenium获取页面静态数据。
 ##### 2.
 ###### （1）
 
-[!源码地址](https://github.com/SuiMingYang/hz-house-price-statics)
+[源码地址](https://github.com/SuiMingYang/hz-house-price-statics)
 ----
 
 Author: suimingyang 
