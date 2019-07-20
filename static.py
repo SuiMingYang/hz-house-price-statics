@@ -33,6 +33,8 @@ data['admin_money']=data['basic_info'].str.extract(reg_admin_money)
 data['property_type']=data['basic_info'].str.extract(reg_property_type)
 data['safe']=data['basic_info'].str.extract(reg_safe)
 data['clean']=data['basic_info'].str.extract(reg_clean)
+data['build_area']=data['basic_info'].str.extract(reg_build_area)
+data['build_count']=data['basic_info'].str.extract(reg_build_count)
 
 data['water']=data['amenities_info'].str.extract(reg_water)
 data['warm']=data['amenities_info'].str.extract(reg_warm)
@@ -40,8 +42,20 @@ data['electric']=data['amenities_info'].str.extract(reg_electric)
 data['gas']=data['amenities_info'].str.extract(reg_gas)
 data['elevator']=data['amenities_info'].str.extract(reg_elevator)
 data['park']=data['amenities_info'].str.extract(reg_park)
+data['communicate']=data['amenities_info'].str.extract(reg_communicate)
 
-#data['park']=data['around_instrument_info'].str.extract(reg_park)
+#
+
+data['kindergarten']=data['around_instrument_info'].str.extract(reg_kindergarten)[0].str.split('、').str.len()
+data['school']=data['around_instrument_info'].str.extract(reg_school)[0].str.split('、').str.len()
+data['university']=data['around_instrument_info'].str.extract(reg_university)[0].str.split('、').str.len()
+data['mall']=data['around_instrument_info'].str.extract(reg_mall)[0].str.split('、').str.len()
+data['hospital']=data['around_instrument_info'].str.extract(reg_hospital)[0].str.split('、').str.len()
+data['postoffice']=data['around_instrument_info'].str.extract(reg_postoffice)[0].str.split('、').str.len()
+data['bank']=data['around_instrument_info'].str.extract(reg_bank)[0].str.split('、').str.len()
+data['else']=data['around_instrument_info'].str.extract(reg_else)[0].str.split('、').str.len()
+data['innersupport']=data['around_instrument_info'].str.extract(reg_innersupport)[0].str.split('、').str.len()
+
 
 data=data.drop(['basic_info','amenities_info','traffic_info','around_instrument_info'],axis=1) 
 '''
