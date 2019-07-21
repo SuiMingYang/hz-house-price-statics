@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt 
+from collections import Counter
+from collections import OrderedDict
 from model.reg_field import *
 # from config import conf
 
@@ -45,7 +47,6 @@ data['park']=data['amenities_info'].str.extract(reg_park)
 data['communicate']=data['amenities_info'].str.extract(reg_communicate)
 
 #
-
 data['kindergarten']=data['around_instrument_info'].str.extract(reg_kindergarten)[0].str.split('、').str.len()
 data['school']=data['around_instrument_info'].str.extract(reg_school)[0].str.split('、').str.len()
 data['university']=data['around_instrument_info'].str.extract(reg_university)[0].str.split('、').str.len()
@@ -71,6 +72,16 @@ data['around_instrument_info']=data['around_instrument_info'].str.extract(reg)
 data=data.fillna(-1)
 
 data['rate_score']=round(data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate']+data['sales_count'],3)
+
+# 查看下数据取值区间
+print(Counter(list(data['water'])))
+print(Counter(list(data['warm'])))
+print(Counter(list(data['electric'])))
+print(Counter(list(data['gas'])))
+print(Counter(list(data['elevator'])))
+print(Counter(list(data['park'])))
+print(Counter(list(data['communicate'])))
+print(Counter(list(data['struct_type'])))
 
 data.sort_values(['rate_score'],ascending=False).to_csv('house_score.csv',index=False)
 
