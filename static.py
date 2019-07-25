@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 from collections import Counter
 from collections import OrderedDict
 from model.reg_field import *
+
+from sklearn.preprocessing import OneHotEncoder
 # from config import conf
 
 data=pd.read_csv('./data_history/houseinfo.csv')
@@ -46,7 +48,7 @@ data['elevator']=data['amenities_info'].str.extract(reg_elevator)
 data['park']=data['amenities_info'].str.extract(reg_park)
 data['communicate']=data['amenities_info'].str.extract(reg_communicate)
 
-#
+# 
 data['kindergarten']=data['around_instrument_info'].str.extract(reg_kindergarten)[0].str.split('、').str.len()
 data['school']=data['around_instrument_info'].str.extract(reg_school)[0].str.split('、').str.len()
 data['university']=data['around_instrument_info'].str.extract(reg_university)[0].str.split('、').str.len()
@@ -71,26 +73,32 @@ data['around_instrument_info']=data['around_instrument_info'].str.extract(reg)
 # 填充0
 data=data.fillna(-1)
 
-data['rate_score']=round(data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate']+data['sales_count'],3)
-
 # 查看下数据取值区间
-print(Counter(list(data['water'])))
-print(Counter(list(data['warm'])))
-print(Counter(list(data['electric'])))
-print(Counter(list(data['gas'])))
-print(Counter(list(data['elevator'])))
-print(Counter(list(data['park'])))
-print(Counter(list(data['communicate'])))
-print(Counter(list(data['struct_type'])))
+# print(Counter(list(data['water'])))
+# print(Counter(list(data['warm'])))
+# print(Counter(list(data['electric'])))
+# print(Counter(list(data['gas'])))
+# print(Counter(list(data['elevator'])))
+# print(Counter(list(data['park'])))
+# print(Counter(list(data['communicate'])))
+# print(Counter(list(data['struct_type'])))
+
+# struct_type类型少，可以做onehot编码
+# listUniq = data.ix[:,'struct_type'].unique()
+# for j in range(len(listUniq)):
+#     data.ix[:,'struct_type'] = data.ix[:,'struct_type'].apply(lambda x:j if x==listUniq[j] else x)
+# print(data)
+
+
+# 正在补充房地产知识，找到优劣房源的评估标准
+data['rate_score']=round(data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate'],3) #+data['sales_count']
 
 data.sort_values(['rate_score'],ascending=False).to_csv('house_score.csv',index=False)
 
 
-'''
-for item in data.sort_values(['rate_score'],ascending=False).iterrows():
-    if item[1]['rate_score']>=30:
-        print(item[1]['name'],item[1]['rate_score'])
-'''
+
+
+
 
 
 

@@ -1,80 +1,74 @@
-import itertools
 import pandas as pd
 import numpy as np
-import statsmodels.api as sm
-import matplotlib.pyplot as plt
-plt.style.use('fivethirtyeight')
+import seaborn as sns
+import matplotlib.pyplot as plt 
 
-data = pd.read_csv('./data_history/houseprice.csv')
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import StratifiedShuffleSplit
+from sklearn.metrics import accuracy_score, log_loss
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC, LinearSVC, NuSVC,SVR
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, GradientBoostingClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.neural_network import MLPClassifier
+from sklearn.model_selection import learning_curve
+from sklearn.metrics import precision_score
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import recall_score
+from sklearn.preprocessing import scale,MinMaxScaler
+ 
+# 时间序列+SVR预测
 
-data=data[data['name']==u'王家弄小区']
-x=list(data['date','price'])
-y=list(data['date','price'])
-
-# Define the p, d and q parameters to take any value between 0 and 2
-p = d = q = range(0, 2)
-
-# Generate all different combinations of p, q and q triplets
-pdq = list(itertools.product(p, d, q))
-
-# Generate all different combinations of seasonal p, q and q triplets
-seasonal_pdq = [(x[0], x[1], x[2], 12) for x in list(itertools.product(p, d, q))]
-
-print('Examples of parameter combinations for Seasonal ARIMA...')
-print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[1]))
-print('SARIMAX: {} x {}'.format(pdq[1], seasonal_pdq[2]))
-print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[3]))
-print('SARIMAX: {} x {}'.format(pdq[2], seasonal_pdq[4]))
-
-# warnings.filterwarnings("ignore") # specify to ignore warning messages
-
-for param in pdq:
-    for param_seasonal in seasonal_pdq:
-        try:
-            mod = sm.tsa.statespace.SARIMAX(y,
-                                            order=param,
-                                            seasonal_order=param_seasonal,
-                                            enforce_stationarity=False,
-                                            enforce_invertibility=False)
-
-            results = mod.fit()
-
-            print('ARIMA{}x{}12 - AIC:{}'.format(param, param_seasonal, results.aic))
-        except Exception as e:
-            print(e)
-            continue
-
-mod = sm.tsa.statespace.SARIMAX(y,
-                                order=(1, 1, 0),
-                                seasonal_order=(1, 0, 0, 12),
-                                enforce_stationarity=False,
-                                enforce_invertibility=False)
-
-results = mod.fit()
-
-print(results.summary().tables[1])
-
-
-
-pred = results.get_prediction(start=pd.to_datetime('2019-07'), dynamic=False)
-pred_ci = pred.conf_int()
+geography_tree=pd.read_csv("./data_history/geography_tree.csv")
+houseprice=pd.read_csv("./data_history/houseprice.csv")
+houseinfo=pd.read_csv("./data_history/houseinfo.csv")
 
 '''
-data = pd.read_csv('./data_history/houseprice.csv', parse_dates=['date'], index_col='index')
-#差分处理
-diff_series = diff_series.diff(1)#一阶
-diff_series2 = diff_series.diff(1)#二阶
-#ACF与PACF
-#从scipy导入包
-from scipy import stats
-#画出acf和pacf
-sm.graphics.tsa.plot_acf(diff_series)
-sm.graphics.tsa.plot_pacf(diff_series)
-#arima模型
-from statsmodels.tsa.arima_model import ARIMA
-model = ARIMA(train_data,order=(p,d,q),freq='')#freq是频率,根据数据填写
-arima = model.fit()#训练
-print(arima)
-pred = arima.predict(start='',end='')#预测
-
+for item in houseprice.groupby('name'):
+    item[0]
+    item[1].
 '''
+x=[[i,i,i]for i in range(24)]#houseprice[houseprice['name']=='松木场河东']['index']
+y=list(houseprice[houseprice['name']=='松木场河东']['price'])
+
+
+scaler = MinMaxScaler(feature_range=(0, 1))
+x = scaler.fit_transform(x)
+
+clf = SVR()
+clf.fit(x, y)
+
+x=scaler.fit_transform([[i,i,i]for i in range(0,31,1)])
+y+=list(clf.predict(scaler.fit_transform(([[i,i,i]for i in range(24,31,1)]))))
+
+plt.plot([i[0] for i in x],y,color='red')
+plt.scatter([i[0] for i in x],y,color='blue')
+plt.show()
+
+# 收敛问题，用归一化解决
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
