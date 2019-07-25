@@ -36,6 +36,17 @@ x=[[i,i,i]for i in range(24)]#houseprice[houseprice['name']=='松木场河东'][
 y=list(houseprice[houseprice['name']=='松木场河东']['price'])
 
 
+
+from minepy import MINE
+mine = MINE(alpha=0.6, c=15)
+mine.compute_score([i for i in range(24)], y)
+def print_stats(mine):
+    print("MIC:%d" % mine.mic())
+    # 1-相关性很高（线性相关，包括正弦，多项式），0-无相关性
+print_stats(mine)
+
+
+
 scaler = MinMaxScaler(feature_range=(0, 1))
 x = scaler.fit_transform(x)
 
@@ -50,7 +61,6 @@ plt.scatter([i[0] for i in x],y,color='blue')
 plt.show()
 
 # 收敛问题，用归一化解决
-
 
 
 
