@@ -126,7 +126,6 @@ class Load_Data(object):
         #self.get_grade_data()
         self.get_history_price(valiage)
 
-
     def get_page_url(self,valiage,driver):
         try:
             #获取页面静态数据
@@ -290,10 +289,20 @@ class Load_Data(object):
 
     def get_req(self,url):
         pro = ['222.240.184.126:8086', '210.26.64.44:3128', '121.69.46.177:9000'] 
-        proxies={'http': random.choice(pro)}
-        head="Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)"
-        return requests.get(url,headers={'User-Agent':head})
-
+        proxy={'http': random.choice(pro)}
+        USER_AGENTS = [
+            "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)",
+            "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)",
+            "Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.0.04506.30)",
+            "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN) AppleWebKit/523.15 (KHTML, like Gecko, Safari/419.3) Arora/0.3 (Change: 287 c9dfb30)",
+            "Mozilla/5.0 (X11; U; Linux; en-US) AppleWebKit/527+ (KHTML, like Gecko, Safari/419.3) Arora/0.6",
+            "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.2pre) Gecko/20070215 K-Ninja/2.1.1",
+            "Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-CN; rv:1.9) Gecko/20080705 Firefox/3.0 Kapiko/3.0",
+            "Mozilla/5.0 (X11; Linux i686; U;) Gecko/20070322 Kazehakase/0.4.5"
+        ]
+ 
+        user_agent = random.choice(USER_AGENTS)
+        return requests.get(url,proxies=proxy,headers={'User-Agent':user_agent})
 
 if __name__ == "__main__":
     load_data=Load_Data()
