@@ -183,7 +183,7 @@ class lstm():
 
 if __name__ == "__main__":
     # Load the dataset/导入数据集
-    file = r'data.xlsx'
+    file = r'./lstm-predict/data.xlsx'
     dataframe = pd.read_excel(file, sheet_name=0, header=0, index_col=None)
     dataset = dataframe.iloc[:, [1, 2, 3, 4, 5, 6, 7, 8]].values
     dataset = dataset.astype('float32')
@@ -206,7 +206,19 @@ if __name__ == "__main__":
     # Start an LSTM model/开始一个LSTM网络
     model = lstm(dataset, hyper_params)  # Create instance of LSTM/实例化模型
     api,trainPredict, testPredict, y_train, y_test = model.lstm()  # Create and fit the LSTM network/创建并拟合LSTM网络
-    print(api)
+    #print(api)
+
+
+    print(scaler.inverse_transform(api.predict(np.array([scaler.fit_transform([[97.8],[-0.221],[4.9],[68.96]]),scaler.fit_transform([[97.8],[-0.221],[4.9],[68.96]])]))))  # 
+    a=[]
+    df=dataframe.values
+    for i,item in enumerate(dataframe.values): 
+        a.append(scaler.fit_transform([[item[1]],[item[2]],[item[3]],[item[7]]])) 
+    a.append(scaler.fit_transform([[df[90][1]],[df[90][2]],[df[90][3]],[df[90][7]]]))
+    print(scaler.inverse_transform(api.predict(np.array(a)))) 
+
+
+
     trainMAPE, testMAPE, trainPredict, testPredict = model.mape(scaler, trainPredict
                                                                 , testPredict)  # Evaluate network performance/评估网络效果
     model.plot(scaler, trainPredict, testPredict)  # Visualization results/可视化结果

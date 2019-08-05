@@ -61,6 +61,7 @@ plt.scatter([i[0] for i in x],y,color='blue')
 plt.show()
 
 # 收敛问题，用归一化解决
+#  
 
 
 

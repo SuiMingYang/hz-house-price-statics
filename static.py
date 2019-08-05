@@ -14,11 +14,12 @@ data=pd.read_csv('./data_history/houseinfo.csv')
 # 填充0
 data=data.fillna(0)
 
-print(pd.to_numeric(data['search_rate'], errors=0).var())
-print(pd.to_numeric(data['search_rate'], errors=0).max())
-print(pd.to_numeric(data['search_rate'], errors=0).min())
+def detail(content):
+    print("方差",pd.to_numeric(content, errors=0).var())
+    print("最大",pd.to_numeric(content, errors=0).max())
+    print("最小",pd.to_numeric(content, errors=0).min())
 
-rate_mapping = {"A": 10, "B": 7.5, "C": 5, "D": 2.5}
+rate_mapping = {"A": 10, "B": 7.5, "C": 5, "D": 2.5,None:0}
 data['activity_rate'] = data['activity_rate'].map(rate_mapping)
 data['property_rate'] = data['property_rate'].map(rate_mapping)
 data['education_rate'] = data['education_rate'].map(rate_mapping)
@@ -28,15 +29,17 @@ data['search_rate']=round(pd.to_numeric(data['search_rate'], errors=0)/5,3)
 data['house_resources']=pd.to_numeric(data['house_resources'].str.split('套').str[0], errors=0)
 data['sales_count']=pd.to_numeric(data['sales_count'].str.split('套').str[0], errors=0)
 
+
 # ------------------- 详细文本维度 start ---------------------- #
 data['house_count']=data['basic_info'].str.extract(reg_house_count)
 data['struct_type']=data['basic_info'].str.extract(reg_struct_type)
 data['green_rate']=data['basic_info'].str.extract(reg_green_rate)
+data['green_rate']=pd.to_numeric(data['green_rate'].str.extract(r'([\d\.]+)')[0],errors=0)/5
 data['volume_rate']=data['basic_info'].str.extract(reg_volume_rate)
 data['admin_money']=data['basic_info'].str.extract(reg_admin_money)
+#detail(data['admin_money'].str.extract(r'([\d\.]+)')[0])
+#data['admin_money']=pd.to_numeric(data['admin_money'].str.extract(r'([\d\.]+)')[0],errors=0)/5
 data['property_type']=data['basic_info'].str.extract(reg_property_type)
-data['safe']=data['basic_info'].str.extract(reg_safe)
-data['clean']=data['basic_info'].str.extract(reg_clean)
 data['build_area']=data['basic_info'].str.extract(reg_build_area)
 data['build_count']=data['basic_info'].str.extract(reg_build_count)
 
@@ -44,6 +47,8 @@ data['water']=data['amenities_info'].str.extract(reg_water)
 data['warm']=data['amenities_info'].str.extract(reg_warm)
 data['electric']=data['amenities_info'].str.extract(reg_electric)
 data['gas']=data['amenities_info'].str.extract(reg_gas)
+data['safe']=data['amenities_info'].str.extract(reg_safe)
+data['clean']=data['amenities_info'].str.extract(reg_clean)
 data['elevator']=data['amenities_info'].str.extract(reg_elevator)
 data['park']=data['amenities_info'].str.extract(reg_park)
 data['communicate']=data['amenities_info'].str.extract(reg_communicate)
@@ -71,7 +76,7 @@ data['around_instrument_info']=data['around_instrument_info'].str.extract(reg)
 # ------------------- 详细文本维度  end  ---------------------- #
 
 # 填充0
-data=data.fillna(-1)
+data=data.fillna(0)
 
 # 查看下数据取值区间
 # print(Counter(list(data['water'])))
@@ -91,7 +96,9 @@ data=data.fillna(-1)
 
 
 # 正在补充房地产知识，找到优劣房源的评估标准
-data['rate_score']=round(data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate'],3) #+data['sales_count']
+data['rate_score']=round(data['green_rate']+data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate']+data['kindergarten']*8+data['school']*10+data['university']*1+data['mall']*3+data['hospital']*7+data['postoffice']*2+data['bank']*3+data['else']*2+data['innersupport']*3,3) #+data['sales_count']
+
+
 
 data.sort_values(['rate_score'],ascending=False).to_csv('house_score.csv',index=False)
 
