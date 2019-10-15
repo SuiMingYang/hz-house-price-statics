@@ -1,0 +1,128 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/static/css/tango.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title>Getting Started - </title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+
+  <body>
+    <div id="container">
+      
+<div id="header">
+  <div class="post-nav"><a href="/">Home</a>&nbsp;&#187;&nbsp;<a href="/#intro">intro</a>&nbsp;&#187;&nbsp;Getting Started
+    <span class="updated">Page Updated&nbsp;
+      2099-06-02 00:00
+    </span></div>
+</div>
+<div class="clearfix"></div>
+
+<div class="page_title">Getting Started</div>
+
+  <div class="toc"><span class="toctitle">Table of Contents</span><ul>
+<li><a href="#simiki">Simiki</a><ul>
+<li><a href="#quick-start">Quick Start</a><ul>
+<li><a href="#install">Install</a></li>
+<li><a href="#update">Update</a></li>
+<li><a href="#init-site">Init Site</a></li>
+<li><a href="#create-a-new-wiki">Create a new wiki</a></li>
+<li><a href="#generate">Generate</a></li>
+<li><a href="#preview">Preview</a></li>
+</ul>
+</li>
+<li><a href="#others">Others</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</li>
+</ul>
+</div>
+<h1 id="simiki">Simiki</h1>
+<p><a href="https://pypi.python.org/pypi/simiki"><img alt="Latest Version" src="http://img.shields.io/pypi/v/simiki.svg" /></a><br />
+<a href="https://github.com/tankywoo/simiki/blob/master/LICENSE"><img alt="The MIT License" src="http://img.shields.io/badge/license-MIT-yellow.svg" /></a><br />
+<a href="https://travis-ci.org/tankywoo/simiki"><img alt="Build Status" src="https://travis-ci.org/tankywoo/simiki.svg" /></a><br />
+<a href="https://coveralls.io/r/tankywoo/simiki"><img alt="Coverage Status" src="https://img.shields.io/coveralls/tankywoo/simiki.svg" /></a></p>
+<p>Simiki is a simple wiki framework, written in <a href="https://www.python.org/">Python</a>.</p>
+<ul>
+<li>Easy to use. Creating a wiki only needs a few steps</li>
+<li>Use <a href="http://daringfireball.net/projects/markdown/">Markdown</a>. Just open your editor and write</li>
+<li>Store source files by category</li>
+<li>Static HTML output</li>
+<li>A CLI tool to manage the wiki</li>
+</ul>
+<p>Simiki is short for <code>Simple Wiki</code> :)</p>
+<h2 id="quick-start">Quick Start</h2>
+<h3 id="install">Install</h3>
+<div class="hlcode"><pre><span class="n">pip</span> <span class="n">install</span> <span class="n">simiki</span>
+</pre></div>
+
+
+<h3 id="update">Update</h3>
+<div class="hlcode"><pre><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">simiki</span>
+</pre></div>
+
+
+<h3 id="init-site">Init Site</h3>
+<div class="hlcode"><pre><span class="n">mkdir</span> <span class="n">mywiki</span> <span class="o">&amp;&amp;</span> <span class="n">cd</span> <span class="n">mywiki</span>
+<span class="n">simiki</span> <span class="n">init</span>
+</pre></div>
+
+
+<h3 id="create-a-new-wiki">Create a new wiki</h3>
+<div class="hlcode"><pre><span class="n">simiki</span> <span class="n">new</span> <span class="o">-</span><span class="n">t</span> <span class="s">&quot;Hello Simiki&quot;</span> <span class="o">-</span><span class="n">c</span> <span class="n">first</span><span class="o">-</span><span class="n">catetory</span>
+</pre></div>
+
+
+<h3 id="generate">Generate</h3>
+<div class="hlcode"><pre><span class="n">simiki</span> <span class="n">g</span>
+</pre></div>
+
+
+<h3 id="preview">Preview</h3>
+<div class="hlcode"><pre><span class="n">simiki</span> <span class="n">p</span> <span class="o">-</span><span class="n">w</span>
+</pre></div>
+
+
+<p>For more information, <code>simiki -h</code> or have a look at <a href="http://simiki.org">Simiki.org</a></p>
+<h2 id="others">Others</h2>
+<ul>
+<li><a href="http://simiki.org">simiki.org</a></li>
+<li><a href="https://github.com/tankywoo/simiki">https://github.com/tankywoo/simiki</a></li>
+<li>Email: <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#109;&#101;&#64;&#116;&#97;&#110;&#107;&#121;&#119;&#111;&#111;&#46;&#99;&#111;&#109;">&#109;&#101;&#64;&#116;&#97;&#110;&#107;&#121;&#119;&#111;&#111;&#46;&#99;&#111;&#109;</a></li>
+<li><a href="https://github.com/tankywoo/simiki/wiki/Simiki-Users">Simiki Users</a></li>
+</ul>
+<h2 id="license">License</h2>
+<p>The MIT License (MIT)</p>
+<p>Copyright (c) 2013 Tanky Woo</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of<br />
+this software and associated documentation files (the "Software"), to deal in<br />
+the Software without restriction, including without limitation the rights to<br />
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of<br />
+the Software, and to permit persons to whom the Software is furnished to do so,<br />
+subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all<br />
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR<br />
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS<br />
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR<br />
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER<br />
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN<br />
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+    </div>
+    <div id="footer">
+      <span>
+        <p>Copyright © 2019 .
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.</p>
+        <p>Site Generated 2019-08-14 10:55:11</p>
+      </span>
+    </div>
+
+    
+    
+  </body>
+</html>

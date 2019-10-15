@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <link rel="Stylesheet" type="text/css" href="/static/css/style.css">
+    <link rel="Stylesheet" type="text/css" href="/static/css/tango.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="alternate" type="application/atom+xml" href="atom.xml" title="Atom feed">
+    <title></title>
+    <meta name="keywords" content=""/>
+    <meta name="description" content=""/>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  </head>
+
+  <body>
+    <div id="container">
+      
+<div class="title"></div>
+
+<div class="index">    
+    <div class="category">
+      <h2 id="intro">Intro
+      </h2>
+      <div class="category_pages">
+        <ul>  
+          <li class="pagelist item_arrow">
+              <a href="./intro/gettingstarted.html">Getting Started</a>
+          </li>
+        </ul>
+      </div> <!-- end category_pages -->
+    </div> <!-- end category -->
+    <div class="clearfix"></div>
+</div>
+    </div>
+    <div id="footer">
+      <span>
+        <p>Copyright © 2019 .
+        Powered by <a href="http://simiki.org/" target="_blank">Simiki</a>.</p>
+        <p>Site Generated 2019-08-14 10:55:11</p>
+      </span>
+    </div>
+
+    
+<script>
+  var list_wrappers = document.getElementsByClassName('list_wrapper')
+  for (var i = 0, len = list_wrappers.length; i < len; i++) {
+    var list_wrapper = list_wrappers[i];
+    var coll_name = list_wrapper.getElementsByClassName('coll_name')[0];
+    var coll_list = list_wrapper.getElementsByClassName('coll_list')[0];
+    var width = coll_name.clientWidth + 3;
+    // http://stackoverflow.com/a/10118190/1276501
+    coll_list.setAttribute("style","margin-left: " + width + "px");
+    coll_list.style.marginLeft = width + "px";
+  }
+</script>
+  </body>
+</html>

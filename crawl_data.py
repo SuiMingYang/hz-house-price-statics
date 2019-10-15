@@ -16,7 +16,7 @@ class Driver(object):
         chrome_options.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在的报错
         chrome_options.add_argument('window-size=1920x3000')  # 指定浏览器分辨率
         # 加代理ip池
-        # chrome_options.add_argument("--proxy-server=http://222.240.184.126:8086")
+        chrome_options.add_argument("--proxy-server=http://222.240.184.126:8086")
         chrome_options.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
         chrome_options.add_argument('--hide-scrollbars')  # 隐藏滚动条, 应对一些特殊页面
         chrome_options.add_argument('blink-settings=imagesEnabled=false')  # 不加载图片, 提升速度
@@ -26,7 +26,19 @@ class Driver(object):
 
 class Load_Data(object):
     def __init__(self):
+        '''
+        chrome_options = Options()
+        chrome_options.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在的报错
+        chrome_options.add_argument('window-size=1920x3000')  # 指定浏览器分辨率
+        # 加代理ip池
+        # chrome_options.add_argument("--proxy-server=http://222.240.184.126:8086")
+        chrome_options.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
+        chrome_options.add_argument('--hide-scrollbars')  # 隐藏滚动条, 应对一些特殊页面
+        chrome_options.add_argument('blink-settings=imagesEnabled=false')  # 不加载图片, 提升速度
+        chrome_options.add_argument('--headless')  # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 
+        self.driver = webdriver.Chrome(options=chrome_options)
+        '''
         # 地区：树结构
         self.area_tree={
             "area_name":[],
@@ -157,13 +169,16 @@ class Load_Data(object):
             tag=driver.find_element_by_xpath('//*[@id="main"]/div[2]')
             try:
                 driver.find_element_by_xpath('//*[@id="main"]/div[1]').click()
+                self.estate_obj['estate_activity_rate'].append(tag.text.split('\n')[1].split(':')[1].replace(' ','')) #活跃度评级
+                self.estate_obj['estate_property_rate'].append(tag.text.split('\n')[2].split(':')[1].replace(' ','')) #物业评级
+                self.estate_obj['estate_education_rate'].append(tag.text.split('\n')[3].split(':')[1].replace(' ','')) #教育评级
+                self.estate_obj['estate_plate_rate'].append(tag.text.split('\n')[4].split(':')[1].replace(' ','')) #板块评级
             except Exception as e:
                 print("点击隐藏标签报错：",e)
-            
-            self.estate_obj['estate_activity_rate'].append(tag.text.split('\n')[1].split(':')[1].replace(' ','')) #活跃度评级
-            self.estate_obj['estate_property_rate'].append(tag.text.split('\n')[2].split(':')[1].replace(' ','')) #物业评级
-            self.estate_obj['estate_education_rate'].append(tag.text.split('\n')[3].split(':')[1].replace(' ','')) #教育评级
-            self.estate_obj['estate_plate_rate'].append(tag.text.split('\n')[4].split(':')[1].replace(' ','')) #板块评级
+                self.estate_obj['estate_activity_rate'].append(" ")
+                self.estate_obj['estate_property_rate'].append(" ")
+                self.estate_obj['estate_education_rate'].append(" ")
+                self.estate_obj['estate_plate_rate'].append(" ")
 
             #===================请求次数多进入验证码模式=====================#
             #===================图像识别=====================#
@@ -180,10 +195,6 @@ class Load_Data(object):
             else:
                 self.estate_obj['estate_house_resources'].append(" ")
                 self.estate_obj['estate_sales_count'].append(" ")
-                self.estate_obj['estate_activity_rate'].append(" ")
-                self.estate_obj['estate_property_rate'].append(" ")
-                self.estate_obj['estate_education_rate'].append(" ")
-                self.estate_obj['estate_plate_rate'].append(" ")
                 return True,estate_param
 
     def get_detail_info(self,estate_param,valiage,estate,driver):
@@ -290,7 +301,7 @@ class Load_Data(object):
     def get_req(self,url):
         pro = ['222.240.184.126:8086', '210.26.64.44:3128', '121.69.46.177:9000'] 
         proxy={'http': random.choice(pro)}
-        USER_AGENTS = [
+        USER_AGENTS  = [
             "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 2.0.50727; Media Center PC 6.0)",
             "Mozilla/5.0 (compatible; MSIE 8.0; Windows NT 6.0; Trident/4.0; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; .NET CLR 1.0.3705; .NET CLR 1.1.4322)",
             "Mozilla/4.0 (compatible; MSIE 7.0b; Windows NT 5.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; InfoPath.2; .NET CLR 3.0.04506.30)",
@@ -302,22 +313,26 @@ class Load_Data(object):
         ]
  
         user_agent = random.choice(USER_AGENTS)
-        return requests.get(url,proxies=proxy,headers={'User-Agent':user_agent})
+        #return requests.get(url,proxies=proxy,headers={'User-Agent':user_agent})
+        return requests.get(url)
 
 if __name__ == "__main__":
-    load_data=Load_Data()
-    block_list=load_data.get_block_list()
-    dri=[]
-    
-    for i in range(4):
-        dri.append(Driver().driver)
-        #load_data.load_block(block,dri)
-    
-    executor=ThreadPoolExecutor(max_workers=4)
-    result=executor.map(load_data.load_block,block_list,dri)
-
-    for d in dri:
-        d.quit()
+    try:
+        load_data=Load_Data()
+        block_list=load_data.get_block_list()
+        dri=[]
+        di=Driver().driver
+        for i in range(10):
+            #dri.append(Driver().driver)
+            
+            load_data.load_block(block_list[i],di)
+        '''
+        executor=ThreadPoolExecutor(max_workers=4)
+        result=executor.map(load_data.load_block,block_list,dri)
+        '''
+    except Exception as e:
+        for d in dri:
+            d.quit()
     
 '''
 for block in block_list['project']:
