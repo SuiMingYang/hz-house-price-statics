@@ -21,7 +21,8 @@ import pandas
 
 #df=ts.get_hist_data('601857',start='2016-06-15',end='2018-01-12')
 df=pd.read_csv('data_history/houseprice.csv')
-df=df.iloc[0:5000]
+# 序列太短的无法预测
+df=df.iloc[0:1000]
 dd=df[['price','dates']]
 
 #print(dd.values.shape[0])

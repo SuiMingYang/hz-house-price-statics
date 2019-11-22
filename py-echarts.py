@@ -19,6 +19,7 @@ def timeline_bar() -> Timeline:
     return tl
 timeline_bar().render()
 '''
+
 from example.commons import Faker
 from pyecharts import options as opts
 from pyecharts.charts import Bar, Grid, Line,Scatter,Timeline,Page, Pie
