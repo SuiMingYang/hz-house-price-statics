@@ -10,7 +10,31 @@ from sklearn.preprocessing import OneHotEncoder
 # from config import conf
 
 data=pd.read_csv('./data_history/houseinfo.csv')
+price=pd.read_csv('./data_history/houseprice.csv')
 
+p_list=[]
+raise_rate1=[]
+raise_rate2=[]
+for i,p in enumerate(price.groupby(['name'])):
+    p_list.append(p[0])
+    #一年增长率
+    try:
+        raise_rate1.append(round(list(p[1]['price'])[9]/list(p[1]['price'])[0],3))
+    except Exception as e:
+        raise_rate1.append(0)
+    #二年增长率
+    try:
+        raise_rate2.append(round(list(p[1]['price'])[-1]/list(p[1]['price'])[9],3))
+    except Exception as e:
+        raise_rate2.append(0)
+p_obj={
+    'name':p_list,
+    'raise_rate1':raise_rate1,
+    'raise_rate2':raise_rate2
+}
+
+price=pd.DataFrame(p_obj,index=None)
+data=pd.merge(data,price,on='name',how='left')
 # 填充0
 data=data.fillna(0)
 
@@ -24,7 +48,7 @@ data['activity_rate'] = data['activity_rate'].map(rate_mapping)
 data['property_rate'] = data['property_rate'].map(rate_mapping)
 data['education_rate'] = data['education_rate'].map(rate_mapping)
 data['plate_rate'] = data['plate_rate'].map(rate_mapping)
-data['search_rate']=round(pd.to_numeric(data['search_rate'], errors=0)/5,3)
+# data['search_rate']=round(pd.to_numeric(data['search_rate'], errors=0)/5,3)
 
 data['house_resources']=pd.to_numeric(data['house_resources'].str.split('套').str[0], errors=0)
 data['sales_count']=pd.to_numeric(data['sales_count'].str.split('套').str[0], errors=0)
@@ -49,20 +73,28 @@ data['electric']=data['amenities_info'].str.extract(reg_electric)
 data['gas']=data['amenities_info'].str.extract(reg_gas)
 data['safe']=data['amenities_info'].str.extract(reg_safe)
 data['clean']=data['amenities_info'].str.extract(reg_clean)
+
+#是否有电梯
 data['elevator']=data['amenities_info'].str.extract(reg_elevator)
+data['elevator']=['0' if (u'无' in str(i)) or (u'没有' in str(i)) or (str(i)=='nan') else '1' for i in data['elevator']]
+
 data['park']=data['amenities_info'].str.extract(reg_park)
 data['communicate']=data['amenities_info'].str.extract(reg_communicate)
 
+
+data['bus']=pd.to_numeric(data['traffic_info'].str.extract(reg_bus)[0].str.replace(' ','、').str.split('、').str.len(),errors=0)
+data['subway']=pd.to_numeric(data['traffic_info'].str.extract(reg_subway)[0].str.replace(' ','、').str.split('、').str.len(),errors=0)
+
 # 
-data['kindergarten']=data['around_instrument_info'].str.extract(reg_kindergarten)[0].str.split('、').str.len()
-data['school']=data['around_instrument_info'].str.extract(reg_school)[0].str.split('、').str.len()
-data['university']=data['around_instrument_info'].str.extract(reg_university)[0].str.split('、').str.len()
-data['mall']=data['around_instrument_info'].str.extract(reg_mall)[0].str.split('、').str.len()
-data['hospital']=data['around_instrument_info'].str.extract(reg_hospital)[0].str.split('、').str.len()
-data['postoffice']=data['around_instrument_info'].str.extract(reg_postoffice)[0].str.split('、').str.len()
-data['bank']=data['around_instrument_info'].str.extract(reg_bank)[0].str.split('、').str.len()
-data['else']=data['around_instrument_info'].str.extract(reg_else)[0].str.split('、').str.len()
-data['innersupport']=data['around_instrument_info'].str.extract(reg_innersupport)[0].str.split('、').str.len()
+data['kindergarten']=data['around_instrument_info'].str.extract(reg_kindergarten)[0].str.replace(' ','、').str.split('、').str.len()
+data['school']=data['around_instrument_info'].str.extract(reg_school)[0].str.replace(' ','、').str.split('、').str.len()
+data['university']=data['around_instrument_info'].str.extract(reg_university)[0].str.replace(' ','、').str.split('、').str.len()
+data['mall']=data['around_instrument_info'].str.extract(reg_mall)[0].str.replace(' ','、').str.split('、').str.len()
+data['hospital']=data['around_instrument_info'].str.extract(reg_hospital)[0].str.replace(' ','、').str.split('、').str.len()
+data['postoffice']=data['around_instrument_info'].str.extract(reg_postoffice)[0].str.replace(' ','、').str.split('、').str.len()
+data['bank']=data['around_instrument_info'].str.extract(reg_bank)[0].str.replace(' ','、').str.split('、').str.len()
+data['else']=data['around_instrument_info'].str.extract(reg_else)[0].str.replace(' ','、').str.split('、').str.len()
+data['innersupport']=data['around_instrument_info'].str.extract(reg_innersupport)[0].str.replace(' ','、').str.split('、').str.len()
 
 
 data=data.drop(['basic_info','amenities_info','traffic_info','around_instrument_info'],axis=1) 
@@ -96,7 +128,7 @@ data=data.fillna(0)
 
 
 # 正在补充房地产知识，找到优劣房源的评估标准
-data['rate_score']=round(data['green_rate']+data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['search_rate']+data['kindergarten']*8+data['school']*10+data['university']*1+data['mall']*3+data['hospital']*7+data['postoffice']*2+data['bank']*3+data['else']*2+data['innersupport']*3,3) #+data['sales_count']
+data['rate_score']=round(data['green_rate']+data['activity_rate']+data['property_rate']+data['education_rate']+data['plate_rate']+data['kindergarten']*8+data['school']*10+data['university']*1+data['mall']*3+data['hospital']*7+data['postoffice']*2+data['bank']*3+data['else']*2+data['innersupport']*3+data['raise_rate1']*10+data['raise_rate2']*15+data['bus']*4+data['subway']*7,3) #+data['sales_count']
 
 
 

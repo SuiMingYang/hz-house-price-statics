@@ -59,7 +59,7 @@ class Load_Data(object):
             'estate_property_rate':[], #物业评级
             'estate_education_rate':[], #教育评级
             'estate_plate_rate':[], #板块评级
-            'estate_search_rate':[], #搜索热度
+            #'estate_search_rate':[], #搜索热度
 
             'estate_basic_info':[], #基础信息
             'estate_amenities_info':[], #配套设施信息
@@ -139,31 +139,30 @@ class Load_Data(object):
         self.get_history_price(valiage)
 
     def get_page_url(self,valiage,driver):
-        try:
-            #获取页面静态数据
-            driver.get("http:%s" % valiage["url"]) 
-            #self.estate_obj['estate_search_rate'].append(driver.find_element_by_xpath('/html/body/div[3]/div[3]/div[2]/div[3]/ul/li[1]/b').text)
-            self.estate_obj['estate_search_rate'].append(' ')
-            return True
-        except Exception as e:
-            print("获取小区路径报错：",e)
-            if driver.current_url.find('code')>-1:
-                #driver.find_element_by_xpath('//*[@id="verify_page"]/div/div[2]/p').text=="请输入图片中的验证码：":
-                # 重新导入这条
-                return False
-            else:
-                self.estate_obj['estate_search_rate'].append(" ")
-                return True
+
+        driver.get("http:%s" % valiage["url"]) 
+        return True
+        # try:
+        #     self.estate_obj['estate_search_rate'].append(driver.find_element_by_xpath('/html/body/div[3]/div[3]/div[2]/div[3]/ul/li[1]/b').text)
+        # except Exception as e:
+        #     print("获取搜索指数报错：",e)
+        #     if driver.current_url.find('code')>-1:
+        #         #driver.find_element_by_xpath('//*[@id="verify_page"]/div/div[2]/p').text=="请输入图片中的验证码：":
+        #         # 重新导入这条
+        #         return False
+        #     else:
+        #         self.estate_obj['estate_search_rate'].append(" ")
+        #         return True
 
     def get_page_star(self,driver):
         try:
             estate_param=driver.find_element_by_xpath('//*[@id="pcxqfangjia_B02_01"]').get_attribute('href') 
             driver.get(estate_param)
             
+            # 点击，获取静态元素
             js = "document.getElementById('main').children[1].style.display='block'"
             driver.execute_script(js)
 
-            # 点击，获取静态页面
             self.estate_obj['estate_house_resources'].append(driver.find_element_by_xpath('//*[@id="xqwxqy_C01_16"]/a[1]/div/p[2]').text)
             self.estate_obj['estate_sales_count'].append(driver.find_element_by_xpath('//*[@id="xqwxqy_C01_16"]/a[2]/div/p[2]').text)
             tag=driver.find_element_by_xpath('//*[@id="main"]/div[2]')
@@ -246,7 +245,7 @@ class Load_Data(object):
             '''
     
     def get_history_price(self,valiage):
-        detail_url='https://fangjia.fang.com/fangjia/common/ajaxdetailtrenddata/hz?dataType=proj&projcode=%s&year=2' % valiage["url"].split('/')[-1].split('.')[0]
+        detail_url='https://fangjia.fang.com/fangjia/common/ajaxdetailtrenddata/hz?dataType=proj&projcode=%s&year=100' % valiage["url"].split('/')[-1].split('.')[0]
         detail_res=self.get_req(detail_url)
         detail_list=detail_res.json() #两年的详细数据
         for detail in detail_list:
@@ -279,7 +278,7 @@ class Load_Data(object):
             "property_rate":pd.Series(self.estate_obj['estate_property_rate']),
             "education_rate":pd.Series(self.estate_obj['estate_education_rate']),
             "plate_rate":pd.Series(self.estate_obj['estate_plate_rate']),
-            "search_rate":pd.Series(self.estate_obj['estate_search_rate']),
+            #"search_rate":pd.Series(self.estate_obj['estate_search_rate']),
             "basic_info":pd.Series(self.estate_obj['estate_basic_info']),
             "amenities_info":pd.Series(self.estate_obj['estate_amenities_info']),
             "traffic_info":pd.Series(self.estate_obj['estate_traffic_info']),
@@ -296,7 +295,7 @@ class Load_Data(object):
             "date":pd.Series(self.detail_obj['detail_date']),
         }
         houseprice_df = pd.DataFrame(houseprice_data,index=None)
-        houseprice_df.to_csv('./data/houseprice.csv',encoding="utf-8")
+        houseprice_df.to_csv('./data/houseprice.csv',encoding="utf-8",index=None)
 
     def get_req(self,url):
         pro = ['222.240.184.126:8086', '210.26.64.44:3128', '121.69.46.177:9000'] 
@@ -317,20 +316,22 @@ class Load_Data(object):
         return requests.get(url)
 
 if __name__ == "__main__":
+    
+    load_data=Load_Data()
+    block_list=load_data.get_block_list()
+    dri=[]
+    di=Driver().driver
     try:
-        load_data=Load_Data()
-        block_list=load_data.get_block_list()
-        dri=[]
-        di=Driver().driver
-        for i in range(10):
+        for i in range(len(block_list)):
             #dri.append(Driver().driver)
-            
             load_data.load_block(block_list[i],di)
+        load_data.data2csv()
         '''
         executor=ThreadPoolExecutor(max_workers=4)
         result=executor.map(load_data.load_block,block_list,dri)
         '''
     except Exception as e:
+        print(e)
         for d in dri:
             d.quit()
     
