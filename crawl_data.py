@@ -1,3 +1,4 @@
+
 import requests
 import pandas as pd
 import numpy as np
@@ -16,11 +17,11 @@ class Driver(object):
         chrome_options.add_argument('--no-sandbox')  # 解决DevToolsActivePort文件不存在的报错
         chrome_options.add_argument('window-size=1920x3000')  # 指定浏览器分辨率
         # 加代理ip池
-        chrome_options.add_argument("--proxy-server=http://222.240.184.126:8086")
+        # chrome_options.add_argument("--proxy-server=http://222.240.184.126:8086")
         chrome_options.add_argument('--disable-gpu')  # 谷歌文档提到需要加上这个属性来规避bug
         chrome_options.add_argument('--hide-scrollbars')  # 隐藏滚动条, 应对一些特殊页面
         chrome_options.add_argument('blink-settings=imagesEnabled=false')  # 不加载图片, 提升速度
-        chrome_options.add_argument('--headless')  # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
+        #chrome_options.add_argument('--headless')  # 浏览器不提供可视化页面. linux下如果系统不支持可视化不加这条会启动失败
 
         self.driver = webdriver.Chrome(options=chrome_options)
 
@@ -199,12 +200,14 @@ class Load_Data(object):
     def get_detail_info(self,estate_param,valiage,estate,driver):
         try:
             #维度，全部信息，待清洗
-            driver.get(estate_param+"/xiangqing/")
+            #driver.get(estate_param+"/xiangqing/")
+            de=driver.find_element_by_xpath('//*[@id="kesfxqxq_A01_03_01"]/a')
+            driver.get(de.get_attribute('href'))
             
-            basic_info=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div[1]/div[2]/div[2]/dl').text
-            amenities_info=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div[1]/div[3]/div[2]/dl').text
-            traffic_info=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div[1]/div[4]/div[2]/dl').text
-            around_instrument=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div[1]/div[5]/div[2]/dl').text
+            basic_info=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div/div[2]/div[2]').text
+            amenities_info=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div/div[3]/div[2]/dl').text
+            traffic_info=driver.find_element_by_xpath('//*[@id="trafficBox"]/div[2]/dl/dt').text
+            around_instrument=driver.find_element_by_xpath('/html/body/div[3]/div[4]/div/div[5]/div[2]/dl').text
             
             self.estate_obj['estate_basic_info'].append(basic_info)
             self.estate_obj['estate_amenities_info'].append(amenities_info)
